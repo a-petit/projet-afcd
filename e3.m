@@ -46,6 +46,7 @@ plot(domain, g, 'DisplayName','le signal filtré');
 
 s1 = ifft(fft(g) .* invert(fft(d), 1.0e-10));
 plot(domain, s1, 'ob', 'DisplayName','le signal reconstitué');
+xlabel('temps (t)')
 legend()
 
 % -- Fonction d'inversion

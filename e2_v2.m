@@ -134,6 +134,8 @@ function plot_subdiv(Q, s, a)
     y = 1:Q;
     %mesh(x, y, p);
     contour(x, y, p);
+    xlabel('\lambda')
+    ylabel('Q')
     
     saveas(gcf, strcat('img/ex2_contour', int2str(Q), '.png'))
 end

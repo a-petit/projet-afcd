@@ -1,33 +1,35 @@
-
+clf;
 
 % Frequence d'échantillonage
 Fe = 32;
 % Fréquence du signal
 F0 = 7;
-% Demi-nombre d'échantillons, influe sur l'intervalle de temps
-% d'observation du signal x(t)
+% Nombre d'échantillons par moitié
 N  = 15;
-% Phase initiale du signal
+% Phase initiale du signal ?
 f0 = 0.2;
 % Pas d'échantillonage
-a  = 1 / Fe
+a  = 1 / Fe;
 % T
-T = 2 * N * a
-
-
-res_app = zeros(1, 2 * N);
-res_fft = zeros(1, 2 * N);
+T = 2 * N * a;
 
 % Calcul du spectre approché
 lambda_c = 1 / (2 * a);
 lambdas = linspace(-lambda_c, lambda_c, 2 * N);
 
 % Subdivision de l'intervalle de temps
-t = linspace(-N  * a, (N - 1) * a, 2 * N);
+t = 0:a:(T-a); % t = linspace(-N  * a, (N - 1) * a, 2 * N);
 % Signal échantillonné
-x_n = f(t, F0);
+xn = real(f(t, F0));
 % La fft directe
-fft_xn = fft(x_n);
+fft_xn = fft(xn);
+
+plot(xn);
+plot(abs(fft_xn));
+return;
+
+%res_app = zeros(1, 2 * N);
+%res_fft = zeros(1, 2 * N);
 
 for k = (-N):(N-1)
     lambda_k = k / T;
@@ -38,18 +40,27 @@ end
 clf;
 hold on;
 plot(lambdas, res_app, 'r')
-plot(lambdas, res_fft, 'b')
-% plot(t, fft_xn, '--b')
+plot(lambdas, res_fft, '--b')
+
+%plot(t, fft_xn, '--b')
 %plot(t, real(f(t, F0))); % Pourquoi a-t-on un signal complexe ??
 
 
 % S_N(lambda) : le module du spectre approché en lambda
 % @param lambda : un réel
+
+function [s] = sn_lambda(lambda, f0, a, N)
+    omega = pi * (f0 - a * lambda);
+    s = a * (cos(omega) + 1i * sin(omega)) * sin(2 * N * omega) / sin(omega);
+    s = abs(s);
+end
+%{
 function [s] = sn_lambda(lambda, Fe, f0, F0, N)
     omega = pi * f0 * (1 - lambda / F0);
     s = (1 / Fe) * (cos(omega) + 1i * sin(omega)) * sin(2 * omega * N) / sin(omega);
     s = abs(s);
 end
+%}
 
 % f(x)
 function [y] = f(x, F0)

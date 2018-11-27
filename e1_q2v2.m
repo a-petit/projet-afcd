@@ -3,11 +3,13 @@
 Fe = 32;
 N  = 15;
 
-
+%{
 for f0 = [0.05 0.1 0.45 0.49 0.5 1]
     plot_spectrum(f0, Fe, N)
 end
 %}
+
+plot_spectrum(7, Fe, N)
 
 %plot_spectrum(0.4, Fe, N)
 
